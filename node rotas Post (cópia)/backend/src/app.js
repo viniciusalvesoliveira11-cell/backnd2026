@@ -4,16 +4,30 @@ const app = express();
 // ativa o leito json
 app.use(express.json())
 
-// rota saida de dados 
-app.get('/usuarios',(req,res)=>{
-res.send("Informação Enviada")
+let usuario = [];
 
+// rota saida de dados 
+
+app.get('/usuarios',(req,res)=>{
+const nomeBusca = req.query.nome;
+if(nomeBusca){
+const nomes = usuario.filter((i)=>{
+    return i.nome.toLowerCase().includes(nomeBusca.toLowerCase());
+})
+return res.status(200).json(nomes);
+
+}
+
+
+res.json([...usuario]);
 })
 
-app.post('/usarios',(req, res)=>{
-console.log(req.body);
-res.status(201).jason({mensagem:"Cliente cadastrado"})
 
+
+app.post('/usuarios', (req, res)=>{
+console.log(req.body);
+usuario.push (req.body);
+res.status(201).json({mensagem:"Cliente cadastrado"})
 })
 
 app.listen(3000, ()=>{
